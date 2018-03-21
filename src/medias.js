@@ -5,13 +5,6 @@ export const greaterThanMedias = {
   gtLg: '(min-width: 1921px)',
 };
 
-export const lessThanMedias = {
-  ltXs: '(min-width: 601px)',
-  ltSm: '(min-width: 961px)',
-  ltMd: '(min-width: 1281px)',
-  ltLg: '(min-width: 1921px)',
-};
-
 export const strictMedias = {
   xs: '(max-width: 600px)',
   sm: '(max-width: 960px) and (min-width: 601px)',
@@ -21,6 +14,5 @@ export const strictMedias = {
 
 export default {
   ...greaterThanMedias,
-  ...lessThanMedias,
   ...strictMedias
 };

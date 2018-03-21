@@ -2,7 +2,7 @@ import React from 'react';
 import PropTypes from 'prop-types';
 
 const connectScreenSize = (mapScreenToProps) => (ComposedComponent) => {
-  class ConnectScreenSize extends React.PureComponent {
+  class ConnectScreenSize extends React.Component {
     static contextTypes = {
       screenSizeProvider: PropTypes.object.isRequired,
     };

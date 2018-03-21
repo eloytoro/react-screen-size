@@ -5,6 +5,10 @@
 
 A HoC to connect your components to screen size changes
 
+### Older versions
+
+* [v1.x](https://github.com/eloytoro/react-screen-size/tree/v1.x)
+
 ### Why would you need this
 
 If your component logic depends on screen size then you need this.
@@ -17,11 +21,11 @@ const Container = ({ isTablet, isMobile, isDesktop }) => (
   ...
 )
 
-const mapScreenSizeToProps = (screenSize) => {
+const mapScreenSizeToProps = ({ sm, xs, gtXs }) => {
   return {
-    isTablet: screenSize['small'],
-    isMobile: screenSize['mobile'],
-    isDesktop: screenSize['> small']
+    isTablet: sm,
+    isMobile: xs,
+    isDesktop: gtSm
   }
 }
 
@@ -29,6 +33,43 @@ export default connectScreenSize(mapScreenSizeToProps)(Container);
 ```
 
 ## API
+
+### <MediaProvider [medias] [screenSize]>
+
+Components declared inside of a `MediaProvider` will be listening to screen changes.
+
+#### Props
+
+* `medias` (_Object?_): Extend definitions for screen size criterias. Default values are:
+
+```javascript
+{
+  xs:   '(max-width: 600px)',
+  sm:   '(max-width: 960px) and (min-width: 601px)',
+  md:   '(max-width: 1280px) and (min-width: 961px)',
+  lg:   '(max-width: 1920px) and (min-width: 1281px)',
+  gtXs: '(min-width: 601px)',
+  gtSm: '(min-width: 961px)',
+  gtMd: '(min-width: 1281px)',
+  gtLg: '(min-width: 1921px)',
+}
+```
+
+* `screenSize` (_Object?_): Set initial value of the screenSize passed to connected components,
+useful this for server side rendering. Default values are:
+
+```javascript
+{
+  xs:   false,
+  gtXs: true,
+  sm:   false,
+  gtSm: true,
+  md:   true,
+  gtMd: true,
+  lg:   false,
+  gtLg: false
+}
+```
 
 ### `connectScreenSize(mapScreenSizeToProps)`
 
@@ -39,14 +80,14 @@ Subscribes a React component to screen size changes.
 * `mapScreenSizeToProps(screenSize): screenSizeProps` (_Function_): Any time the screen size updates
 `mapScreenSizeToProps` will be called with the active media queries as an object structure, these
 are the possible values
-  * `screenSize['mobile']` - equals to `(max-width: 600px)`
-  * `screenSize['small']` - equals to `(max-width: 960px) and (min-width: 601px)`
-  * `screenSize['medium']` - equals to `(max-width: 1280px) and (min-width: 961px)`
-  * `screenSize['large']` - equals to `(max-width: 1920px) and (min-width: 1281px)`
-  * `screenSize['> mobile']` - equals to `(min-width: 601px)`
-  * `screenSize['> small']` - equals to `(min-width: 961px)`
-  * `screenSize['> medium']` - equals to `(min-width: 1281px)`
-  * `screenSize['> large']` - equals to `(min-width: 1921px)`
+  * `screenSize.xs`
+  * `screenSize.sm`
+  * `screenSize.md`
+  * `screenSize.lg`
+  * `screenSize.gtXs`
+  * `screenSize.gtSm`
+  * `screenSize.gtMd`
+  * `screenSize.gtLg`
 
 #### Returns
 

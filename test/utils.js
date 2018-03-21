@@ -1,7 +1,4 @@
-import mediaQueries from '../src/medias';
-
-
-export const setupMatchMedia = () => {
+export const setupMatchMedia = (mediaQueries) => {
   const medias = Object.keys(mediaQueries).reduce((result, key) => {
     let matches = false;
     const listeners = [];
@@ -30,8 +27,5 @@ export const setupMatchMedia = () => {
     };
   }, {});
 
-  return {
-    matchMedia: (query) => medias[query],
-    medias
-  }
+  return (query) => medias[query];
 };
