@@ -40,11 +40,11 @@ Subscribes a React component to screen size changes.
 `mapScreenSizeToProps` will be called with the active media queries as an object structure, these
 are the possible values
   * `screenSize['mobile']` - equals to `(max-width: 600px)`
-  * `screenSize['mobile']` - equals to `(max-width: 960px) and (min-width: 601px)`
+  * `screenSize['small']` - equals to `(max-width: 960px) and (min-width: 601px)`
   * `screenSize['medium']` - equals to `(max-width: 1280px) and (min-width: 961px)`
   * `screenSize['large']` - equals to `(max-width: 1920px) and (min-width: 1281px)`
   * `screenSize['> mobile']` - equals to `(min-width: 601px)`
-  * `screenSize['> mobile']` - equals to `(min-width: 961px)`
+  * `screenSize['> small']` - equals to `(min-width: 961px)`
   * `screenSize['> medium']` - equals to `(min-width: 1281px)`
   * `screenSize['> large']` - equals to `(min-width: 1921px)`
 
