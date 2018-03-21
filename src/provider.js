@@ -1,43 +1,35 @@
-import medias, { greaterThanMedias } from './medias';
+import defaultMedias, { greaterThanMedias } from './medias';
+
+const gtKeys = Object.keys(greaterThanMedias);
+const defaultScreenSize = {
+  xs:   false,
+  gtXs: true,
+  sm:   false,
+  gtSm: true,
+  md:   true,
+  gtMd: true,
+  lg:   false,
+  gtLg: false
+};
 
 class Provider {
-  constructor() {
+  constructor(medias = {}, screenSize = {}, matchMedia = window.matchMedia) {
     this.listeners = []
-    this.setup();
+    this.medias = Object.assign({}, defaultMedias, medias);
+    this.screenSize = Object.assign({}, defaultScreenSize, screenSize);
+    this.mediaQueryLists = {};
+
+    Object.keys(this.medias).forEach((key) => {
+      this.mediaQueryLists[key] = matchMedia(this.medias[key]);
+    });
+
+    gtKeys.forEach(key => {
+      this.mediaQueryLists[key].addListener(() => this.update());
+    });
   }
 
   getScreenSize() {
     return this.screenSize;
-  }
-
-  bootstrap(matchMedia) {
-    this.mediaQueryLists = {};
-
-    Object.keys(medias).forEach((query) => {
-      this.mediaQueryLists[medias[query]] = matchMedia(query);
-    });
-
-    Object.keys(greaterThanMedias).forEach((query) => {
-      this.mediaQueryLists[medias[query]].addListener(() => this.update());
-    });
-
-    this.update();
-  }
-
-  setup({ mobile, tablet } = {}) {
-    const isMobile = mobile;
-    const isTablet = !isMobile && tablet;
-    const isDesktop = !isMobile && !isTablet;
-    this.screenSize = {
-      'mobile':   isMobile,
-      '> mobile': isTablet || isDesktop,
-      'small':    isTablet,
-      '> small':  isDesktop,
-      'medium':   isDesktop,
-      '> medium': isDesktop,
-      'large':    false,
-      '> large':  false
-    }
   }
 
   update() {
@@ -56,10 +48,4 @@ class Provider {
   }
 }
 
-const provider = new Provider();
-
-if (typeof window !== 'undefined' && typeof window.matchMedia !== 'undefined') {
-  provider.bootstrap(window.matchMedia);
-}
-
-export default provider;
+export default Provider;

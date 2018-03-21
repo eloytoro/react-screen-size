@@ -1,5 +1,5 @@
 import React from 'react';
-import provider from '../src/provider';
+import MediaProvider from '../src/MediaProvider';
 import connectScreenSize from '../src/connectScreenSize';
 import { mount } from 'enzyme';
 import { setupMatchMedia } from './utils';
@@ -7,23 +7,25 @@ import { setupMatchMedia } from './utils';
 
 const { matchMedia, medias } = setupMatchMedia();
 const defaultScreenSize = {
-  '> large': false,
-  '> medium': false,
-  '> small': false,
-  '> mobile': false,
-  'large': false,
-  'medium': false,
-  'small': false,
-  'mobile': false
+  gtLg: false,
+  gtMd: false,
+  gtSm: false,
+  gtXs: false,
+  lg: false,
+  md: false,
+  sm: false,
+  xs: false
 };
-
-provider.bootstrap(matchMedia);
 
 const Stub = () => (<div />);
 const ConnectedStub = connectScreenSize(props => props)(Stub);
 
 describe('connectScreenSize', () => {
-  const wrapped = mount(<ConnectedStub />);
+  const wrapped = mount(
+    <MediaProvider screenSize={defaultScreenSize} matchMedia={matchMedia}>
+      <ConnectedStub />
+    </MediaProvider>
+  );
   const component = wrapped.find(Stub);
 
   it('passes props to children', () => {
@@ -39,8 +41,8 @@ describe('connectScreenSize', () => {
     medias['(min-width: 961px)'].enable();
     expect(component.props()).toEqual({
       ...defaultScreenSize,
-      '> small': true,
-      'small': true
+      gtSm: true,
+      sm: true
     });
   });
 });

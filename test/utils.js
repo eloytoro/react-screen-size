@@ -2,7 +2,7 @@ import mediaQueries from '../src/medias';
 
 
 export const setupMatchMedia = () => {
-  const medias = Object.keys(mediaQueries).reduce((result, query) => {
+  const medias = Object.keys(mediaQueries).reduce((result, key) => {
     let matches = false;
     const listeners = [];
 
@@ -26,7 +26,7 @@ export const setupMatchMedia = () => {
 
     return {
       ...result,
-      [query]: media
+      [mediaQueries[key]]: media
     };
   }, {});
 

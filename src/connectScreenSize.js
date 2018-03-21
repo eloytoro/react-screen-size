@@ -1,28 +1,31 @@
 import React from 'react';
-import provider from './provider';
-
+import PropTypes from 'prop-types';
 
 const connectScreenSize = (mapScreenToProps) => (ComposedComponent) => {
   class ConnectScreenSize extends React.PureComponent {
-    constructor(props) {
+    static contextTypes = {
+      screenSizeProvider: PropTypes.object.isRequired,
+    };
+
+    constructor(props, context) {
       super(props);
-      this.state = { computedProps: this.computeScreenSizeProps(props) };
+      this.state = {
+        computedProps: mapScreenToProps(context.screenSizeProvider.getScreenSize(), props)
+      };
     }
 
     componentDidMount() {
-      this.unsubscribe = provider.subscribe(this.updateComputedProps);
+      this.unsubscribe = this.context.screenSizeProvider.subscribe(this.updateComputedProps);
     }
 
     componentWillUnmount() {
       if (this.unsubscribe) this.unsubscribe();
     }
 
-    computeScreenSizeProps = (props) => {
-      return mapScreenToProps(provider.getScreenSize(), props);
-    };
-
     updateComputedProps = () => {
-      this.setState({ computedProps: this.computeScreenSizeProps(this.props) });
+      this.setState({
+        computedProps: mapScreenToProps(this.context.screenSizeProvider.getScreenSize(), this.props)
+      });
     }
 
     render() {
