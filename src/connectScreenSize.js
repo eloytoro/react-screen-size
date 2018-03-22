@@ -1,4 +1,5 @@
 import React from 'react';
+import shallowEqual from 'fbjs/lib/shallowEqual';
 import PropTypes from 'prop-types';
 
 const connectScreenSize = (mapScreenToProps) => (ComposedComponent) => {
@@ -23,9 +24,12 @@ const connectScreenSize = (mapScreenToProps) => (ComposedComponent) => {
     }
 
     updateComputedProps = () => {
-      this.setState({
-        computedProps: mapScreenToProps(this.context.screenSizeProvider.getScreenSize(), this.props)
-      });
+      const computedProps = mapScreenToProps(this.context.screenSizeProvider.getScreenSize(), this.props);
+      if (!shallowEqual(computedProps, this.state.computedProps)) {
+        this.setState({
+          computedProps
+        });
+      }
     }
 
     render() {

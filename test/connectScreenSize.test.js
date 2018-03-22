@@ -18,8 +18,14 @@ const defaultScreenSize = {
   xs: false
 };
 
-const Stub = () => (<div />);
-const ConnectedStub = connectScreenSize(props => props)(Stub);
+const Stub = jest.fn(() => (<div />));
+const mapScreenSizeToProps = props => ({
+  isMobile: props.xs,
+  isTablet: props.sm,
+  isDesktop: props.gtSm
+});
+
+const ConnectedStub = connectScreenSize(mapScreenSizeToProps)(Stub);
 
 describe('connectScreenSize', () => {
   const Wrapper = ({ foo }) => (
@@ -32,7 +38,9 @@ describe('connectScreenSize', () => {
 
   const component = wrapped.find(Stub);
   let expectedProps = {
-    ...defaultScreenSize,
+    isMobile: false,
+    isTablet: false,
+    isDesktop: false,
     foo: 'bar'
   };
 
@@ -41,7 +49,9 @@ describe('connectScreenSize', () => {
   });
 
   it('stays the same when a strict query applies', () => {
-    matchMedia(medias.sm).enable();
+    Stub.mockClear();
+    matchMedia(medias.gtLg).enable();
+    expect(Stub.mock.calls.length).toBe(0);
     expect(component.props()).toEqual(expectedProps);
   });
 
@@ -49,8 +59,7 @@ describe('connectScreenSize', () => {
     matchMedia(medias.gtSm).enable();
     expectedProps = {
       ...expectedProps,
-      gtSm: true,
-      sm: true
+      isDesktop: true
     };
     expect(component.props()).toEqual(expectedProps);
   });
@@ -62,5 +71,5 @@ describe('connectScreenSize', () => {
     };
     wrapped.setProps({ foo: 'baz' });
     expect(component.props()).toEqual(expectedProps);
-  })
+  });
 });
