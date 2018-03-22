@@ -1,6 +1,6 @@
 {
   "name": "react-screen-size",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "description": "HoC to connect your component to the current screen size",
   "main": "lib/index.js",
   "module": "lib/index.js",
